@@ -1,6 +1,6 @@
 # 用 AI 在 FPGA 上复现 Transformer 大模型
 
-本目录是本次大作业的完整工程提交目录，包含 Transformer/nanoGPT FPGA 主工程、LeNet-5 额外上板工程、CPU/GPU 基准测试、QuestaSim RTL 仿真和三平台性能能效对比图。
+本目录是完整工程提交目录，包含 Transformer/nanoGPT FPGA 主工程、LeNet-5 额外上板工程、CPU/GPU 基准测试、QuestaSim RTL 仿真和三平台性能能效对比图。
 
 目标平台：
 

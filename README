@@ -1,5 +1,9 @@
 # 用 AI 在 FPGA 上复现 Transformer 大模型
 
+！！！！！
+注意⚠️：由于存在单个文件大于20M的情况，没有采用目录的形式直接上传，本工程源码压缩包在该界面下Release中可以下载
+！！！！！
+
 本目录是完整工程提交目录，包含 Transformer/nanoGPT FPGA 主工程、LeNet-5 额外上板工程、CPU/GPU 基准测试、QuestaSim RTL 仿真和三平台性能能效对比图。
 
 目标平台：

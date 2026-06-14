@@ -1,5 +1,208 @@
 # My_Transformer_on_fpga
 
-本仓库用于存放 Transformer FPGA 项目说明。
+本仓库是一个面向 Zynq UltraScale+ MPSoC 的神经网络 FPGA 部署与验证工程集合，包含两个主要硬件加速工程：
 
-完整工程压缩包请在 Releases 中下载。
+```text
+lenet/
+My_Transformer_on_fpga/
+Transfomer_on_board_result/
+```
+
+其中 `My_Transformer_on_fpga/` 是最终主要交付工程，完成了字符级 nanoGPT/Transformer 从 Python 训练、INT8 量化导出、Vitis HLS IP 生成、Vivado 综合实现、Vitis 裸机 PS 程序到上板串口验证的完整流程。
+
+`lenet/` 是 LeNet-5 MNIST FPGA 部署示例工程，用于展示从 Keras/hls4ml 到 HLS IP、Vivado 集成和 PS 端调用的完整 CNN 部署流程。
+
+`Transfomer_on_board_result/` 保存 Transformer 工程的上板验证截图、串口输出、Vivado 资源/时序/功耗结果等演示材料。
+
+## 1. 工程目标
+
+本项目目标是验证 AI 模型在 FPGA 上的部署流程，重点覆盖：
+
+- Python 端模型训练与模型资产导出。
+- 定点量化和 C/HLS/PS 可用数据生成。
+- Vitis HLS 生成可综合 IP 核。
+- Vivado 搭建 ZynqMP PS + PL 加速核系统。
+- Vitis 裸机程序实现 PS 端 UART 菜单、AXI-Lite 控制和 DDR buffer 交互。
+- 上板运行，验证 PL IP 可访问、硬件矩阵乘可用、串口交互和结果统计可工作。
+
+## 2. 目录说明
+
+### 2.1 `My_Transformer_on_fpga/`
+
+主 Transformer/nanoGPT FPGA 工程。
+
+目录结构：
+
+```text
+My_Transformer_on_fpga/
+├── python_model_export/
+├── HLS/
+└── vivado2024.2/
+```
+
+各子目录作用：
+
+| 路径 | 作用 |
+|---|---|
+| `python_model_export/` | Python/PyTorch 字符级 nanoGPT 模型训练、验证、INT8 量化、权重导出和 golden 数据生成。 |
+| `python_model_export/data/` | 训练数据目录，默认使用 tiny Shakespeare 字符级文本。 |
+| `python_model_export/scripts/` | 训练、推理、量化、导出和检查脚本。 |
+| `python_model_export/exports/` | 导出的 `model_config.h`、INT8 权重、scale、tokenizer、golden 输入输出等文件。 |
+| `HLS/` | Vitis HLS 2024.2 C/C++ kernel、testbench、构建脚本、HLS 工程和导出的 IP。 |
+| `HLS/src/` | HLS kernel 源码，包括 `matmul_int8`、`matmul_int8_v2`、`layernorm`、`gelu_lut` 等。 |
+| `HLS/tb/` | HLS CSim 测试代码和测试数据。 |
+| `HLS/hls_projects/` | Vitis HLS 生成的各 kernel 工程。 |
+| `HLS/ip_repo/` | 导出的 HLS IP repository，用于 Vivado 加载。 |
+| `vivado2024.2/` | Vivado/Vitis 工程目录。 |
+| `vivado2024.2/soc_prj/` | Vivado 2024.2 工程，包含 Block Design、综合实现结果、bitstream 等。 |
+| `vivado2024.2/soc_hw/` | 硬件导出文件和地址映射说明。 |
+| `vivado2024.2/soc_sdk/` | Vitis 2024.2 裸机 PS 端 UART 程序和 workspace。 |
+
+主要模型配置：
+
+```text
+模型: character-level nanoGPT / causal Transformer
+数据集: tiny Shakespeare
+n_layer = 6
+n_head = 6
+n_embd = 384
+block_size = 256
+vocab_size = 65
+量化: per-tensor symmetric INT8
+目标器件: xczu7ev-ffvc1156-2-i
+```
+
+最终验证口径：
+
+- Vivado 综合和实现通过。
+- bitstream/XSA 已生成。
+- PS 端 UART 程序可运行。
+- PL HLS IP 可通过 AXI-Lite 访问。
+- `matmul_int8` 硬件计算测试通过。
+- Transformer 文本交互演示通过。
+- 完整 6 层 nanoGPT 计算链路已运行并输出统计，但质量和延迟仍按真实结果标记为 `FAIL/PARTIAL`，作为后续优化方向。
+
+### 2.2 `lenet/`
+
+LeNet-5 MNIST FPGA 部署示例工程。
+
+目录结构：
+
+```text
+lenet/
+├── HLS/
+├── lenet5_hls_5ns/
+├── lenet5_hls_local/
+└── *.png
+```
+
+各子目录作用：
+
+| 路径 | 作用 |
+|---|---|
+| `HLS/` | LeNet-5 Keras 训练、hls4ml 转换、测试图片头文件生成。 |
+| `HLS/run_lenet.py` | 训练 LeNet-5，并生成 hls4ml/Vitis HLS 工程。 |
+| `HLS/gen_test_header.py` | 将 MNIST 测试图片转换为 PS 端可用的 C 头文件。 |
+| `HLS/mnist_test_imgs.h` | 10 张 MNIST 测试图片和标签数组。 |
+| `HLS/test_picture/` | 0 到 9 的测试图片 PNG。 |
+| `HLS/lenet5_hls_prj/` | hls4ml 生成的 Vitis HLS 工程。 |
+| `lenet5_hls_5ns/` | 已综合的 Vitis HLS 工作区，目标时钟 5 ns。 |
+| `lenet5_hls_local/soc_hw/` | Vivado 导出的 XSA 硬件平台文件。 |
+| `lenet5_hls_local/soc_prj/` | Vivado 工程，包含综合实现结果和 bitstream。 |
+| `lenet5_hls_local/soc_sdk/` | Vitis 裸机 PS 应用，调用 PL 侧 LeNet IP 完成推理。 |
+| `*.png` | LeNet 结果截图，包括资源、时延、GPU 对比和数字验证图片。 |
+
+LeNet 工程主要流程：
+
+```text
+MNIST
+  -> Keras LeNet-5
+  -> hls4ml
+  -> Vitis HLS myproject_axi IP
+  -> Vivado ZynqMP + HLS IP
+  -> Vitis 裸机程序
+  -> 串口输出 10 张测试图片预测结果
+```
+
+关键实现特征：
+
+- 输入为 28 x 28 x 1 MNIST 图片。
+- HLS 定点精度使用 `ap_fixed<16,6>`。
+- HLS 后端使用 `Vitis`。
+- Vivado 目标器件为 `xczu7ev-ffvc1156-2-i`。
+- PS 端通过 AXI-Lite 写入输入/输出 DDR buffer 地址并启动 PL 推理。
+
+### 2.3 `Transfomer_on_board_result/`
+
+Transformer 上板结果演示目录。
+
+该目录保存最终演示所需的截图和结果材料，通常包括：
+
+- Vivado Block Design 截图。
+- Vivado 综合、实现、资源利用率、时序和功耗截图。
+- FPGA device view 或布局布线截图。
+- 串口菜单启动截图。
+- UART echo 测试结果。
+- PL IP AXI-Lite 寄存器访问测试结果。
+- `matmul_int8` 硬件计算测试结果。
+- Transformer 文本交互演示结果。
+- 完整 6 层 nanoGPT 运行统计结果。
+
+该目录主要用于报告、答辩和讲解视频中展示真实上板验证过程。
+
+## 3. 推荐阅读顺序
+
+第一次查看本仓库时，建议按以下顺序阅读：
+
+1. 阅读本文件，了解总目录结构。
+2. 阅读 `My_Transformer_on_fpga/README.md`，了解主 Transformer 工程。
+3. 阅读 `My_Transformer_on_fpga/PROJECT_COMPLETION_REPORT.md`，了解完整实现过程和最终结果。
+4. 阅读 `My_Transformer_on_fpga/TRANSFORMER_VERSION_COMPARISON.md`，了解不同 Transformer 版本的对比和最终交付原因。
+5. 阅读 `lenet/README.md`，了解 LeNet-5 工程。
+6. 查看 `Transfomer_on_board_result/`，确认上板验证截图和结果。
+
+## 4. 工具版本
+
+本项目主要使用：
+
+```text
+Vivado 2024.2
+Vitis 2024.2
+Vitis HLS 2024.2
+Python
+PyTorch
+TensorFlow/Keras
+hls4ml
+Zynq UltraScale+ MPSoC
+```
+
+主要目标器件：
+
+```text
+xczu7ev-ffvc1156-2-i
+```
+
+## 5. 上板验证结论
+
+Transformer 工程已完成从模型到硬件的端到端部署验证：
+
+- Python 模型训练与导出完成。
+- HLS IP 生成和导出完成。
+- Vivado Block Design 集成完成。
+- 综合、实现、bitstream、XSA 完成。
+- Vitis 裸机 PS 程序可运行。
+- 串口交互、AXI-Lite IP 访问、硬件矩阵乘测试和文本交互演示通过。
+
+完整 nanoGPT 的全模型推理链路已运行，但生成质量和 token 延迟仍是后续优化项。报告中已按真实结果标记，不将 tiny demo 的结果冒充完整模型性能。
+
+LeNet 工程作为 CNN 小模型部署示例，也完成了从 Keras/hls4ml 到 HLS IP、Vivado 集成和 Vitis 裸机调用的流程验证。
+
+## 6. 注意事项
+
+- 本仓库包含 Vivado/Vitis/HLS 工程，文件数量较多，部分文件体积较大。
+- 若从 GitHub clone 后打开工程，建议使用与本项目一致的 Vivado/Vitis/Vitis HLS 2024.2。
+- Vivado/Vitis 工程中可能包含绝对路径缓存；如路径变化，可根据各子目录 README 重新生成或重新导入工程。
+- 上板结果以 `Transfomer_on_board_result/` 和 `My_Transformer_on_fpga/PROJECT_COMPLETION_REPORT.md` 中记录为准。
+- 完整 6 层 nanoGPT 仍有优化空间，后续可继续提升 PL 端算子覆盖率、DDR 访问效率和 token 生成速度。
+
+

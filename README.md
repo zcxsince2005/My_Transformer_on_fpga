@@ -207,7 +207,18 @@ scripts\build_all.bat
 | [`docs/V4_BOARD_RUN_GUIDE.md`](docs/V4_BOARD_RUN_GUIDE.md) | 上板与串口验证步骤 |
 | [`docs/V4_STAGE0_PATH_CHECK.md`](docs/V4_STAGE0_PATH_CHECK.md) | 路径独立性与脚本检查记录 |
 
-## 12. 后续工作
+## 12. 发布包
+
+[**Releases → v4.0.0**](https://github.com/zcxsince2005/My_Transformer_on_fpga/releases/tag/v4.0.0) 提供免克隆的完整工程包：
+
+| 资产 | 说明 |
+| --- | --- |
+| `nanogpt_on_fpga_hls_V4.zip` | 本仓库在该 tag 下的完整快照（源码 + 脚本 + 文档 + 预编译 `bit`/`xsa`/`elf` + checkpoint），约 23 MB，834 个条目 |
+| `SHA256SUMS.txt` | 上述压缩包的 SHA-256 校验值 |
+
+也可直接点击 GitHub 的 *Source code (zip)* 获取同一份源码（不含单独打包的校验文件）。
+
+## 13. 后续工作
 
 当前瓶颈是 **PS/PL 调用粒度**——每个 Linear 都要单独发起一次 IP 调用。下一步计划实现数值一致的融合算子：
 

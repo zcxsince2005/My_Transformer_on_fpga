@@ -1,0 +1,15 @@
+#ifndef GPT_CONFIG_H
+#define GPT_CONFIG_H
+
+#define GPT_VOCAB_SIZE 128
+#define GPT_BLOCK_SIZE 128
+#define GPT_N_EMBD 96
+#define GPT_N_HEAD 4
+#define GPT_N_LAYER 2
+#define GPT_HEAD_SIZE 24
+#define GPT_MLP_HIDDEN 384
+#define GPT_MAX_NEW_TOKENS 128
+#define GPT_MIN_NEW_TOKENS 64
+#define GPT_MAX_SUPPORTED_NEW_TOKENS 200
+
+#endif

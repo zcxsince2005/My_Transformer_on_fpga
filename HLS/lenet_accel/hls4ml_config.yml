@@ -1,0 +1,114 @@
+Backend: Vitis
+ClockPeriod: 5
+ClockUncertainty: 27%
+HLSConfig:
+  LayerName:
+    conv1:
+      Precision:
+        accum: ap_fixed<16,6>
+        bias: auto
+        result: ap_fixed<16,6>
+        weight: auto
+      ReuseFactor: 25
+      Trace: false
+    conv1_relu:
+      Precision:
+        accum: ap_fixed<16,6>
+        result: ap_fixed<16,6>
+      Trace: false
+    conv2:
+      Precision:
+        accum: ap_fixed<16,6>
+        bias: auto
+        result: ap_fixed<16,6>
+        weight: auto
+      ReuseFactor: 75
+      Trace: false
+    conv2_relu:
+      Precision:
+        accum: ap_fixed<16,6>
+        result: ap_fixed<16,6>
+      Trace: false
+    fc1:
+      Precision:
+        accum: ap_fixed<16,6>
+        bias: auto
+        result: ap_fixed<16,6>
+        weight: auto
+      ReuseFactor: 256
+      Trace: false
+    fc1_relu:
+      Precision:
+        accum: ap_fixed<16,6>
+        result: ap_fixed<16,6>
+      Trace: false
+    fc2:
+      Precision:
+        accum: ap_fixed<16,6>
+        bias: auto
+        result: ap_fixed<16,6>
+        weight: auto
+      ReuseFactor: 60
+      Trace: false
+    fc2_relu:
+      Precision:
+        accum: ap_fixed<16,6>
+        result: ap_fixed<16,6>
+      Trace: false
+    flatten:
+      Precision:
+        accum: ap_fixed<16,6>
+        result: ap_fixed<16,6>
+      Trace: false
+    input_layer:
+      Precision:
+        accum: ap_fixed<16,6>
+        result: ap_fixed<16,6>
+      Trace: false
+    output:
+      Precision:
+        accum: ap_fixed<16,6>
+        bias: auto
+        result: ap_fixed<16,6>
+        weight: auto
+      Trace: false
+    pool1:
+      Precision:
+        accum: ap_fixed<16,6>
+        result: ap_fixed<16,6>
+      Trace: false
+    pool2:
+      Precision:
+        accum: ap_fixed<16,6>
+        result: ap_fixed<16,6>
+      Trace: false
+  Model:
+    BitExact: null
+    BramFactor: 1000000000
+    Precision: ap_fixed<16,6>
+    ReuseFactor: 1
+    Strategy: Resource
+    TraceOutput: false
+IOType: io_stream
+InputData: null
+InputShapes:
+  input_layer:
+  - 28
+  - 28
+  - 1
+KerasModel: !keras_model 'lenet5_hls_prj/keras_model.keras'
+OutputDir: lenet5_hls_prj
+OutputPredictions: null
+OutputShapes:
+  layer13_out:
+  - 10
+Part: xczu7ev-ffvc1156-2-i
+ProjectName: myproject
+Stamp: a0154942
+Version: 1.0.0
+WriterConfig:
+  Namespace: null
+  TBOutputStream: both
+  WriteEmulationConstants: false
+  WriteTar: false
+  WriteWeightsTxt: true

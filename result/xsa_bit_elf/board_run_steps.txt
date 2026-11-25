@@ -1,0 +1,50 @@
+Board run steps for nanogpt_on_fpga_hls_V4
+
+Project:
+E:\model_on_fpga\nanogpt_on_fpga_hls_V4
+
+Final required artifacts:
+- nanogpt_zynqmp.bit
+- nanogpt_zynqmp.xsa
+- nanogpt_ps_app.elf
+- gpt_accel_csynth.rpt
+- vivado_utilization_routed.rpt
+- vivado_timing_summary_routed.rpt
+- vivado_power_routed.rpt
+
+Serial settings:
+- 115200 baud
+- 8 data bits
+- 1 stop bit
+- no parity
+- no flow control
+
+Optional cleanup before programming:
+Get-Process | Where-Object { $_.ProcessName -match 'hw_server|cs_server|xsct|xsdb|xvc' } | Stop-Process -Force -ErrorAction SilentlyContinue
+
+Main application programming:
+cd E:\model_on_fpga\nanogpt_on_fpga_hls_V4
+G:\Vivado2024.2\Vitis\2024.2\bin\xsct.bat scripts\run_main_elf.tcl
+
+Compatibility command:
+cd E:\model_on_fpga\nanogpt_on_fpga_hls_V4
+G:\Vivado2024.2\Vitis\2024.2\bin\xsct.bat scripts\jtag_run_test.tcl full-init
+
+The compatibility command now redirects to scripts/run_main_elf.tcl for normal application launch.
+
+Expected main menu:
+Zynq MPSoC AI Demo HLS V4
+1. Run digit recognition demo
+2. Print digit recognition performance
+3. Enter tiny GPT dialogue
+4. Print last tiny GPT generation performance
+5. Print FPGA resource utilization
+
+Validation:
+1 should report LeNet accuracy = 10 / 10.
+3 should enter GPT dialogue and print readable responses.
+4 should show GPT mode LINEAR_ROLLING_KV, parallel factor 64, output parallel factor 4, and fallbacks 0.
+5 should show GPT HLS DSP 204 and full routed DSP 1026 / 1728.
+
+Note:
+The old UART smoke ELF was intentionally removed from this reduced project. Use the main application launch for validation.

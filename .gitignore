@@ -1,0 +1,48 @@
+# ---- Vitis HLS build / solution outputs ----
+HLS/*/*_prj/solution1/
+HLS/*/*_csim_prj/solution1/
+HLS/*/*/solution*/
+HLS/*/*/.autopilot/
+*.adb
+
+# ---- Vivado generated project directories ----
+vivado2024.2/soc_prj/nanogpt_soc.gen/
+vivado2024.2/soc_prj/nanogpt_soc.cache/
+vivado2024.2/soc_prj/nanogpt_soc.hw/
+vivado2024.2/soc_prj/nanogpt_soc.ip_user_files/
+vivado2024.2/soc_prj/nanogpt_soc.sim/
+vivado2024.2/soc_prj/nanogpt_soc.runs/
+vivado2024.2/soc_prj/.Xil/
+vivado2024.2/soc_hw/
+vivado2024.2/**/*.dcp
+vivado2024.2/**/*.ltx
+
+# ---- Vitis generated workspace ----
+vitis2024.2/workspace/nanogpt_platform/
+vitis2024.2/workspace/.metadata/
+vitis2024.2/workspace/ai_menu_app/Debug/
+vitis2024.2/workspace/ai_menu_app/Release/
+
+# ---- Large implementation intermediates ----
+result/vivado_reports/*.dcp
+result/vivado_reports/system_wrapper.bit
+
+# ---- Vivado / XSCT logs ----
+*.jou
+*.backup.*
+vivado*.log
+*.str
+webtalk*.jou
+webtalk*.log
+.Xil/
+
+# ---- Python ----
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# ---- OS / editor ----
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

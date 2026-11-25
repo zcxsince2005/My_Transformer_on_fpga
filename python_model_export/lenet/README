@@ -1,0 +1,30 @@
+# LeNet MNIST 到 hls4ml + Vitis HLS 简易教程
+
+## 1. 依赖准备
+- Python 3.8+，TensorFlow 2.x，scikit-learn
+- hls4ml（安装时启用 Vitis/Vivado 后端）
+- Xilinx Vitis HLS 2022.1+，并准备好 `xczu7ev-ffvc1156-2-e`
+
+## 2. 运行脚本
+```bash
+cd ~/projects/Keras_HLS4ml
+python3 run_lenet.py
+```
+脚本自动完成：数据加载→Keras 训练→hls4ml 转换→C 仿真→Vitis HLS 综合。
+
+## 3. 代码结构速览
+- `阶段 1`：训练经典 LeNet-5（Conv→Pool→Conv→Pool→FC）。使用 `CategoricalCrossentropy(from_logits=True)`，仅 2 个 epoch 快速得到基线精度。
+- `阶段 2`：`config_from_keras_model` 生成 hls4ml 配置，策略设为 `Resource`，精度 `ap_fixed<16,6>`，将 Conv/FC 的 `ReuseFactor` 大幅提高，避免 LLVM 超时。
+- `阶段 3`：抽取 1000 张测试集，验证定点模型，确保量化精度可接受。
+- `阶段 4`：调用 `hls_model.build(csim=False, synth=True, vsynth=False)` 启动 Vitis HLS 综合，报告位于 `lenet5_hls_prj/myproject_prj/solution1/syn/report/csynth.rpt`。
+
+## 4. 常见调整
+- 精度：修改 `config[Model][Precision]` 或逐层 `LayerName` 精度。
+- 并行度：调节 `ReuseFactor`，在时序与资源间折中。
+- 时钟约束：更改 `clock_period`（默认为 5ns）。
+- I/O 模式：`io_type` 可切换 `io_parallel` / `io_stream` 以匹配系统接口。
+
+## 5. 下一步
+- 打开 `logs/hls_run_tcl.log` 查看警告。
+- 如需生成 RTL 或 IP，可将 `hls_model.build(..., vsynth=True, export=True)`。
+- 在 Vivado/Vitis 中集成生成的 IP，配合 AXI stream/BRAM 搭建完整推理链。

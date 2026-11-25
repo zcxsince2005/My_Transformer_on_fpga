@@ -1,0 +1,26 @@
+Project: nanogpt_on_fpga
+Target part: xczu7ev-ffvc1156-2-i
+
+AXI-Lite control map:
+- LeNet HLS IP (myproject_axi / lenet_accel_0): 0x80000000 - 0x8000FFFF
+- Tiny GPT HLS IP (gpt_accel_0):              0x80010000 - 0x8001FFFF
+
+Vitis xparameters.h macros confirmed:
+- XPAR_XMYPROJECT_AXI_0_S_AXI_CONTROL_BASEADDR = 0x80000000
+- XPAR_XGPT_ACCEL_0_S_AXI_CONTROL_BASEADDR     = 0x80010000
+
+PS/PL interfaces:
+- PS UART0 enabled on MIO, 115200 baud expected.
+- PS DDR enabled.
+- PL clock used by BD: 150 MHz for V4 routed timing closure.
+- AXI HPM0 LPD drives AXI-Lite control interconnect.
+- LeNet PL DDR masters use an isolated SmartConnect path:
+  lenet_accel_0/m_axi_gmem0,gmem1 -> axi_lenet_ddr -> S_AXI_HP0_FPD.
+- Tiny GPT PL DDR masters use a separate SmartConnect path:
+  gpt_accel_0/m_axi_gmem0..gmem3 -> axi_gpt_ddr -> S_AXI_HP1_FPD.
+- ZynqMP PS config was migrated from my_demo into vivado2024.2/scripts/ps_config_from_mydemo.tcl.
+
+Generated files:
+- bitstream: nanogpt_zynqmp.bit
+- hardware handoff: nanogpt_zynqmp.xsa, exported with bitstream
+- PS standalone ELF: nanogpt_ps_app.elf

@@ -1,0 +1,112 @@
+
+
+================================================================
+== Vitis HLS Report for 'shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s'
+================================================================
+* Date:           Tue Jun 30 21:10:15 2026
+
+* Version:        2024.2 (Build 5238294 on Nov  8 2024)
+* Project:        myproject_prj
+* Solution:       solution1 (Vivado IP Flow Target)
+* Product family: zynquplus
+* Target device:  xczu7ev-ffvc1156-2-i
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+---------+----------+------------+
+    |  Clock |  Target | Estimated| Uncertainty|
+    +--------+---------+----------+------------+
+    |ap_clk  |  5.00 ns|  2.868 ns|     1.35 ns|
+    +--------+---------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+----------+----------+-----+-----+---------+
+    |  Latency (cycles) |  Latency (absolute) |  Interval | Pipeline|
+    |   min   |   max   |    min   |    max   | min | max |   Type  |
+    +---------+---------+----------+----------+-----+-----+---------+
+    |        0|        0|      0 ns|      0 ns|    1|    1|      yes|
+    +---------+---------+----------+----------+-----+-----+---------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        N/A
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++-----------------+---------+------+--------+--------+-----+
+|       Name      | BRAM_18K|  DSP |   FF   |   LUT  | URAM|
++-----------------+---------+------+--------+--------+-----+
+|DSP              |        -|     -|       -|       -|    -|
+|Expression       |        -|     -|       -|       -|    -|
+|FIFO             |        -|     -|       -|       -|    -|
+|Instance         |        -|     -|       -|       -|    -|
+|Memory           |        -|     -|       -|       -|    -|
+|Multiplexer      |        -|     -|       -|       -|    -|
+|Register         |        -|     -|       1|       -|    -|
++-----------------+---------+------+--------+--------+-----+
+|Total            |        0|     0|       1|       0|    0|
++-----------------+---------+------+--------+--------+-----+
+|Available        |      624|  1728|  460800|  230400|   96|
++-----------------+---------+------+--------+--------+-----+
+|Utilization (%)  |        0|     0|      ~0|       0|    0|
++-----------------+---------+------+--------+--------+-----+
+
++ Detail: 
+    * Instance: 
+    N/A
+
+    * DSP: 
+    N/A
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    N/A
+
+    * Multiplexer: 
+    N/A
+
+    * Register: 
+    +-----------+---+----+-----+-----------+
+    |    Name   | FF| LUT| Bits| Const Bits|
+    +-----------+---+----+-----+-----------+
+    |ap_CS_fsm  |  1|   0|    1|          0|
+    +-----------+---+----+-----+-----------+
+    |Total      |  1|   0|    1|          0|
+    +-----------+---+----+-----+-----------+
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++-----------------------+-----+-----+------------+-----------------------------------------------------------------+--------------+
+|       RTL Ports       | Dir | Bits|  Protocol  |                          Source Object                          |    C Type    |
++-----------------------+-----+-----+------------+-----------------------------------------------------------------+--------------+
+|ap_clk                 |   in|    1|  ap_ctrl_hs|  shift_line_buffer<array<ap_fixed<16, 6, 5, 3, 0>, 1u>, config2>|  return value|
+|ap_rst                 |   in|    1|  ap_ctrl_hs|  shift_line_buffer<array<ap_fixed<16, 6, 5, 3, 0>, 1u>, config2>|  return value|
+|ap_start               |   in|    1|  ap_ctrl_hs|  shift_line_buffer<array<ap_fixed<16, 6, 5, 3, 0>, 1u>, config2>|  return value|
+|ap_done                |  out|    1|  ap_ctrl_hs|  shift_line_buffer<array<ap_fixed<16, 6, 5, 3, 0>, 1u>, config2>|  return value|
+|ap_idle                |  out|    1|  ap_ctrl_hs|  shift_line_buffer<array<ap_fixed<16, 6, 5, 3, 0>, 1u>, config2>|  return value|
+|ap_ready               |  out|    1|  ap_ctrl_hs|  shift_line_buffer<array<ap_fixed<16, 6, 5, 3, 0>, 1u>, config2>|  return value|
+|ap_ce                  |   in|    1|  ap_ctrl_hs|  shift_line_buffer<array<ap_fixed<16, 6, 5, 3, 0>, 1u>, config2>|  return value|
+|in_elem_0_0_0_0_0_val  |   in|   16|     ap_none|                                            in_elem_0_0_0_0_0_val|        scalar|
++-----------------------+-----+-----+------------+-----------------------------------------------------------------+--------------+
+

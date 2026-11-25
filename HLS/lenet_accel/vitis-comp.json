@@ -1,0 +1,12 @@
+{
+  "name": "lenet5_hls_5ns",
+  "type": "HLS",
+  "configuration": {
+    "componentType": "HLS",
+    "configFiles": [
+      "hls_config.cfg"
+    ],
+    "work_dir": "myproject"
+  },
+  "template": "empty_hls_component"
+}

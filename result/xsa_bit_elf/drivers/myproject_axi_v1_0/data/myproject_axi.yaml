@@ -1,0 +1,24 @@
+# ==============================================================
+# Vitis HLS - High-Level Synthesis from C, C++ and OpenCL v2024.2 (64-bit)
+# Tool Version Limit: 2024.11
+# Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+# Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+# 
+# ==============================================================
+%YAML 1.2
+---
+title: myproject_axi driver
+type: driver
+properties:
+    compatible:
+        items:
+            - const: xlnx,myproject-axi-1.0
+config:
+    - XMyproject_axi_Config
+required:
+    - compatible
+    - reg
+additionalProperties:
+   - interrupts
+   - interrupt-parent
+

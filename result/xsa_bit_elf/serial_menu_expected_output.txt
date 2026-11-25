@@ -1,0 +1,44 @@
+Expected serial menu for nanogpt_on_fpga_hls_V4:
+
+UART INIT DONE
+LeNet + tiny GPT FPGA demo
+
+========================================
+Zynq MPSoC AI Demo HLS V4
+Target: XCZU7EV-FFVC1156-2-I
+
+Menu:
+1. Run digit recognition demo
+2. Print digit recognition performance
+3. Enter tiny GPT dialogue
+4. Print last tiny GPT generation performance
+5. Print FPGA resource utilization
+# Please select:
+
+Option 1:
+- Runs the LeNet digit-recognition batch.
+- Expected accuracy: 10 / 10.
+- Returns to the main menu.
+
+Option 2:
+- Prints LeNet performance and comparison information.
+- Returns to the main menu.
+
+Option 3:
+- Enters tiny GPT dialogue.
+- Prompt is User:.
+- Default generation length is 128 tokens.
+- Type len 100, len 160, or len 200 to configure generation length.
+- Type help for mode commands.
+- Type exit to return to the main menu.
+- Generated text is produced from the exported V4 INT8 GPT weights.
+
+Option 4:
+- Prints previous prompt, generated text, generated token count, total cycles/ms, average us/token, and per-token cycles.
+- Expected GPT mode: LINEAR_ROLLING_KV.
+- Expected GPT HLS linear fallbacks: 0.
+
+Option 5:
+- Prints V4 HLS and full routed FPGA resource utilization.
+- Expected GPT HLS DSP: 204.
+- Expected full routed DSP: 1026 / 1728.
